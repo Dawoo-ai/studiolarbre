@@ -51,7 +51,7 @@ const degularDisplay = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Studio Larbre - Studios d'enregistrement, mixage et Atmos à Paris",
+  title: "Studio Larbre - Studio d'enregistrement mixage et mastering - Paris",
   description: "Studio d'enregistrement professionnel à Paris offrant des services d'enregistrement haute fidélité, mixage, mastering et Dolby Atmos.",
 };
 
