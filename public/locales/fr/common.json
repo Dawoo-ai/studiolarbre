@@ -1,0 +1,32 @@
+{
+  "nav": {
+    "studios": "Studios",
+    "references": "Références",
+    "about": "À propos",
+    "contact": "Contact",
+    "menu": "Menu",
+    "close": "Fermer"
+  },
+  "hero": {
+    "tagline": "Studio d'enregistrement, mixage et mastering Paris"
+  },
+  "about": {
+    "title": "À propos de Studio L'Arbre",
+    "intro": "En 2020, Studio L'Arbre est né de la passion de créer un espace unique dédié à l'excellence sonore et à la création musicale.",
+    "description": "Niché au cœur de Paris, notre studio d'enregistrement professionnel offre un environnement acoustique exceptionnel et un équipement de pointe pour concrétiser vos projets musicaux les plus ambitieux.",
+    "features": {
+      "title": "Nos Installations",
+      "mixing": "Mixage professionnel",
+      "recording": "Enregistrement haute fidélité",
+      "atmos": "Dolby Atmos",
+      "mastering": "Mastering"
+    }
+  },
+  "references": {
+    "title": "Références"
+  },
+  "contact": {
+    "title": "Contact",
+    "cta": "Réserver une session"
+  }
+}

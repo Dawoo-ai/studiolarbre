@@ -1,0 +1,32 @@
+{
+  "nav": {
+    "studios": "Studios",
+    "references": "References",
+    "about": "About",
+    "contact": "Contact",
+    "menu": "Menu",
+    "close": "Close"
+  },
+  "hero": {
+    "tagline": "Recording, Mixing and Mastering Studio in Paris"
+  },
+  "about": {
+    "title": "About Studio L'Arbre",
+    "intro": "In 2020, Studio L'Arbre was born from a passion to create a unique space dedicated to sonic excellence and musical creation.",
+    "description": "Nestled in the heart of Paris, our professional recording studio offers an exceptional acoustic environment and state-of-the-art equipment to bring your most ambitious musical projects to life.",
+    "features": {
+      "title": "Our Facilities",
+      "mixing": "Professional mixing",
+      "recording": "High-fidelity recording",
+      "atmos": "Dolby Atmos",
+      "mastering": "Mastering"
+    }
+  },
+  "references": {
+    "title": "References"
+  },
+  "contact": {
+    "title": "Contact",
+    "cta": "Book a session"
+  }
+}

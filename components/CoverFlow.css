@@ -1,0 +1,252 @@
+/* ============================================
+   Cover Flow - CSS Scroll-Driven Animations
+   With JavaScript fallback for broader support
+   ============================================ */
+
+/* Keyframes for the 3D rotation effect */
+@keyframes rotate-cover {
+  0% {
+    transform: translateX(50%) rotateY(-45deg) scale(0.85);
+  }
+  50% {
+    transform: translateX(0) rotateY(0deg) scale(1);
+  }
+  100% {
+    transform: translateX(-50%) rotateY(45deg) scale(0.85);
+  }
+}
+
+/* Keyframes for z-index adjustment */
+@keyframes adjust-z-index {
+  0%, 100% {
+    z-index: 1;
+  }
+  40%, 60% {
+    z-index: 100;
+  }
+}
+
+/* Keyframes for caption fade */
+@keyframes fade-caption {
+  0%, 100% {
+    opacity: 0;
+  }
+  40%, 60% {
+    opacity: 1;
+  }
+}
+
+/* Container wrapper */
+.coverflow-wrapper {
+  width: 100%;
+  perspective: 1200px;
+  perspective-origin: center 50%;
+}
+
+/* Scrollable list container */
+.coverflow-list {
+  display: flex;
+  gap: 0;
+  padding: 60px calc(50vw - 125px);
+  margin: 0;
+  list-style: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  transform-style: preserve-3d;
+}
+
+.coverflow-list::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .coverflow-list {
+    padding: 80px calc(50vw - 160px);
+  }
+}
+
+/* Each list item */
+.coverflow-item {
+  flex: 0 0 250px;
+  width: 250px;
+  height: 320px;
+  scroll-snap-align: center;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+@media (min-width: 768px) {
+  .coverflow-item {
+    flex: 0 0 320px;
+    width: 320px;
+    height: 420px;
+  }
+}
+
+/* CSS Scroll-Driven Animations - only for supported browsers */
+.css-scroll-driven .coverflow-item {
+  view-timeline-name: --li-in-and-out-of-view;
+  view-timeline-axis: inline;
+  animation: adjust-z-index linear both;
+  animation-timeline: --li-in-and-out-of-view;
+  animation-range: cover;
+}
+
+/* Figure containing image + caption */
+.coverflow-figure {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-style: preserve-3d;
+}
+
+/* Image wrapper - receives 3D transforms */
+.coverflow-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background: #0a0a0a;
+  box-shadow:
+    0 30px 60px -15px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* CSS animation for supported browsers */
+.css-scroll-driven .coverflow-image-wrapper {
+  animation: rotate-cover linear both;
+  animation-timeline: --li-in-and-out-of-view;
+  animation-range: cover;
+}
+
+/* JS fallback - smooth transitions */
+.js-fallback .coverflow-image-wrapper {
+  transition: transform 0.1s ease-out;
+}
+
+/* The actual image */
+.coverflow-image {
+  object-fit: cover;
+  user-select: none;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* Shine overlay effect */
+.coverflow-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* Reflection */
+.coverflow-reflection {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  margin-top: 2px;
+  overflow: hidden;
+  transform: scaleY(-1);
+  opacity: 0.4;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 50%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 50%);
+  will-change: transform;
+}
+
+/* CSS animation for reflection */
+.css-scroll-driven .coverflow-reflection {
+  animation: rotate-cover linear both;
+  animation-timeline: --li-in-and-out-of-view;
+  animation-range: cover;
+}
+
+/* JS fallback for reflection */
+.js-fallback .coverflow-reflection {
+  transition: transform 0.1s ease-out;
+}
+
+/* Caption */
+.coverflow-caption {
+  position: absolute;
+  bottom: -45px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  will-change: opacity;
+}
+
+/* CSS animation for caption */
+.css-scroll-driven .coverflow-caption {
+  animation: fade-caption linear both;
+  animation-timeline: --li-in-and-out-of-view;
+  animation-range: cover;
+}
+
+/* JS fallback for caption */
+.js-fallback .coverflow-caption {
+  transition: opacity 0.15s ease-out;
+}
+
+@media (min-width: 768px) {
+  .coverflow-caption {
+    font-size: 1.375rem;
+    bottom: -55px;
+  }
+}
+
+/* ============================================
+   Additional polish
+   ============================================ */
+
+/* Subtle gradient fade on edges */
+.coverflow-wrapper::before,
+.coverflow-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 120px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.coverflow-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, rgb(9, 9, 11) 0%, transparent 100%);
+}
+
+.coverflow-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, rgb(9, 9, 11) 0%, transparent 100%);
+}
+
+.coverflow-wrapper {
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .coverflow-wrapper::before,
+  .coverflow-wrapper::after {
+    width: 200px;
+  }
+}
