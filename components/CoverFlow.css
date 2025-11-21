@@ -67,6 +67,12 @@
   .coverflow-list {
     padding: 80px calc(50vw - 160px);
   }
+
+  /* Disable scroll-snap during auto-scroll on desktop */
+  .coverflow-list.auto-scrolling {
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+  }
 }
 
 /* Each list item */

@@ -26,6 +26,96 @@ export default function CoverFlow({ title, subtitle }: CoverFlowProps) {
 
   const listRef = useRef<HTMLUListElement>(null);
   const [supportsScrollTimeline, setSupportsScrollTimeline] = useState(true);
+  const autoScrollRef = useRef<number | null>(null);
+  const isDesktopRef = useRef(false);
+
+  // Auto-scroll effect for desktop only
+  useEffect(() => {
+    const checkDesktop = () => {
+      isDesktopRef.current = window.innerWidth >= 768;
+      // Update auto-scrolling class based on desktop state
+      if (listRef.current) {
+        if (isDesktopRef.current) {
+          listRef.current.classList.add('auto-scrolling');
+        } else {
+          listRef.current.classList.remove('auto-scrolling');
+        }
+      }
+    };
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+
+    const list = listRef.current;
+    if (!list) return;
+
+    let scrollDirection = 1;
+    let isPaused = false;
+
+    const autoScroll = () => {
+      if (!isDesktopRef.current || isPaused) {
+        autoScrollRef.current = requestAnimationFrame(autoScroll);
+        return;
+      }
+
+      const maxScroll = list.scrollWidth - list.clientWidth;
+      const currentScroll = list.scrollLeft;
+
+      // Reverse direction at edges
+      if (currentScroll >= maxScroll - 1) {
+        scrollDirection = -1;
+      } else if (currentScroll <= 1) {
+        scrollDirection = 1;
+      }
+
+      list.scrollLeft += scrollDirection * 0.8;
+      autoScrollRef.current = requestAnimationFrame(autoScroll);
+    };
+
+    // Pause on hover/touch - re-enable snap for manual scrolling
+    const handleMouseEnter = () => {
+      isPaused = true;
+      list.classList.remove('auto-scrolling');
+    };
+    const handleMouseLeave = () => {
+      isPaused = false;
+      if (isDesktopRef.current) {
+        list.classList.add('auto-scrolling');
+      }
+    };
+    const handleTouchStart = () => {
+      isPaused = true;
+      list.classList.remove('auto-scrolling');
+    };
+    const handleTouchEnd = () => {
+      setTimeout(() => {
+        isPaused = false;
+        if (isDesktopRef.current) {
+          list.classList.add('auto-scrolling');
+        }
+      }, 2000);
+    };
+
+    list.addEventListener('mouseenter', handleMouseEnter);
+    list.addEventListener('mouseleave', handleMouseLeave);
+    list.addEventListener('touchstart', handleTouchStart);
+    list.addEventListener('touchend', handleTouchEnd);
+
+    // Start auto-scroll with a small delay
+    setTimeout(() => {
+      autoScrollRef.current = requestAnimationFrame(autoScroll);
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('resize', checkDesktop);
+      if (autoScrollRef.current) {
+        cancelAnimationFrame(autoScrollRef.current);
+      }
+      list.removeEventListener('mouseenter', handleMouseEnter);
+      list.removeEventListener('mouseleave', handleMouseLeave);
+      list.removeEventListener('touchstart', handleTouchStart);
+      list.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, []);
 
   useEffect(() => {
     // Check for CSS Scroll-Driven Animations support

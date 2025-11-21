@@ -52,7 +52,7 @@ export default function Contact({ translations }: ContactProps) {
             </div>
 
             <a
-              href="https://www.instagram.com/studiolarbre/"
+              href="https://ig.me/m/studiolarbre"
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-block px-12 md:px-16 py-5 md:py-6 bg-white text-black font-light text-xs tracking-[0.25em] uppercase hover:bg-white/90 transition-all duration-500 border border-white/10"
