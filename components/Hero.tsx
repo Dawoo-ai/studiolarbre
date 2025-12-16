@@ -66,7 +66,7 @@ export default function Hero({ tagline }: HeroProps) {
           <div className="flex justify-center mt-10 md:mt-16">
             <a
               href="mailto:valentin.larbre@gmail.com"
-              className="group relative px-12 py-5 md:px-16 md:py-6 text-lg md:text-xl text-white font-light tracking-wide transition-all duration-500 hover:scale-105 rounded-full"
+              className="group relative px-16 py-6 md:px-20 md:py-8 text-lg md:text-xl text-white font-light tracking-wide transition-all duration-500 hover:scale-105 rounded-full"
             >
               <span className="relative z-10">Réserver une session</span>
               {/* Glass effect background */}

@@ -109,9 +109,9 @@ export default function StudioGallery() {
   return (
     <section className="pb-32 md:pb-40 bg-black">
       <div className="container mx-auto px-8 max-w-[1600px]">
-        <div className="flex flex-col gap-12 md:gap-20 lg:gap-24 md:items-center">
+        <div className="flex flex-col md:flex-row gap-12 md:gap-8 lg:gap-12 md:justify-center md:items-start">
           {/* Video */}
-          <div className="group relative w-full aspect-[9/16] md:w-[450px] overflow-hidden">
+          <div className="group relative w-full aspect-[9/16] md:w-[400px] lg:w-[480px] md:aspect-[9/16] overflow-hidden">
             <video
               ref={videoRef}
               autoPlay
@@ -126,7 +126,7 @@ export default function StudioGallery() {
           </div>
 
           {/* Horizontal Scroll Carousel */}
-          <div className="relative w-full aspect-[9/16] md:w-[450px]">
+          <div className="relative w-full aspect-[9/16] md:w-[400px] lg:w-[480px] md:aspect-[9/16]">
             <div
               ref={scrollContainerRef}
               onScroll={handleScroll}

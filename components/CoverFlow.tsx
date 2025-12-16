@@ -74,11 +74,11 @@ export default function CoverFlow({ title, subtitle }: CoverFlowProps) {
 
     // Desktop: Enable wheel scroll horizontally
     const handleWheel = (e: WheelEvent) => {
-      if (!isDesktopRef.current) return;
+      if (window.innerWidth < 768) return; // Check window width directly
       e.preventDefault();
       // Support both vertical scroll (mouse wheel) and horizontal swipe (trackpad)
       const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-      list.scrollLeft += delta * 0.5;
+      list.scrollLeft += delta;
     };
 
     list.addEventListener('wheel', handleWheel, { passive: false });
