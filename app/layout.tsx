@@ -1,16 +1,79 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
-const geistSans = Geist({
+const degularSans = localFont({
+  src: [
+    {
+      path: "../public/fonts/DegularDemo-Thin.otf",
+      weight: "100",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/DegularDemo-Light.otf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/DegularDemo-Regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/DegularDemo-Medium.otf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/DegularDemo-Semibold.otf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/DegularDemo-Bold.otf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
   variable: "--font-geist-sans",
-  subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
+const degularMono = localFont({
+  src: [
+    {
+      path: "../public/fonts/DegularMonoDemo-Thin.otf",
+      weight: "100",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/DegularMonoDemo-Light.otf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/DegularMonoDemo-Regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/DegularMonoDemo-Medium.otf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/DegularMonoDemo-Semibold.otf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/DegularMonoDemo-Bold.otf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
   variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 const degularDisplay = localFont({
@@ -63,7 +126,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${degularDisplay.variable} antialiased`}
+        className={`${degularSans.variable} ${degularMono.variable} ${degularDisplay.variable} antialiased`}
       >
         {children}
       </body>

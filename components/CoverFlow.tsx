@@ -17,30 +17,54 @@ interface CoverFlowProps {
 
 export default function CoverFlow({ title, subtitle }: CoverFlowProps) {
   const artists: Artist[] = [
-    { id: 1, name: '1D1R', image: '/images/artist/1D1R.jpg' },
-    { id: 2, name: 'Vacra', image: '/images/artist/vacra.jpeg' },
+    { id: 1, name: 'Vacra', image: '/images/artist/vacra.jpeg' },
+    { id: 2, name: '1D1R', image: '/images/artist/1D1R.jpg' },
     { id: 3, name: 'Arca M', image: '/images/artist/acramM.jpeg' },
     { id: 4, name: 'Gisèle', image: '/images/artist/gisel.jpeg' },
     { id: 5, name: 'Nash', image: '/images/artist/nash.jpg' },
+    { id: 6, name: 'Louga', image: '/images/artist/Louga.jpg' },
+    { id: 7, name: 'Edmée', image: '/images/artist/Edmee.jpg' },
+    { id: 8, name: 'Ero', image: '/images/artist/Ero -.jpg' },
+    { id: 9, name: 'GSO', image: '/images/artist/GSO.jpg' },
+    { id: 10, name: 'Holy Jacobs', image: '/images/artist/Holy Jacobs.jpg' },
+    { id: 11, name: 'I2D', image: '/images/artist/I2D.jpg' },
+    { id: 12, name: 'Jeebaby', image: '/images/artist/Jeebaby.jpg' },
+    { id: 13, name: 'Labor', image: '/images/artist/Labor.jpg' },
+    { id: 14, name: 'Laskad', image: '/images/artist/Laskad.png' },
+    { id: 15, name: 'Mutha Madiba', image: '/images/artist/Mutha Madiba.jpg' },
+    { id: 16, name: 'Noskro', image: '/images/artist/Noskro.jpg' },
+    { id: 17, name: 'Oulmerie', image: '/images/artist/Oulmerie.jpg' },
+    { id: 18, name: 'Pietra', image: '/images/artist/Pietra.jpg' },
+    { id: 19, name: 'Quiterie', image: '/images/artist/Quiterie.jpg' },
+    { id: 20, name: 'Wookiz', image: '/images/artist/Wookiz.jpg' },
   ];
 
   const listRef = useRef<HTMLUListElement>(null);
   const [supportsScrollTimeline, setSupportsScrollTimeline] = useState(true);
   const autoScrollRef = useRef<number | null>(null);
   const isDesktopRef = useRef(false);
+  const [showArrows, setShowArrows] = useState(false);
 
-  // Auto-scroll effect for desktop only
+  // Handle scroll navigation for mobile
+  const scrollToNext = () => {
+    if (!listRef.current) return;
+    const list = listRef.current;
+    const itemWidth = list.querySelector('.coverflow-item')?.clientWidth || 0;
+    list.scrollBy({ left: itemWidth, behavior: 'smooth' });
+  };
+
+  const scrollToPrev = () => {
+    if (!listRef.current) return;
+    const list = listRef.current;
+    const itemWidth = list.querySelector('.coverflow-item')?.clientWidth || 0;
+    list.scrollBy({ left: -itemWidth, behavior: 'smooth' });
+  };
+
+  // Desktop: Enable horizontal scroll with mouse wheel and trackpad
   useEffect(() => {
     const checkDesktop = () => {
       isDesktopRef.current = window.innerWidth >= 768;
-      // Update auto-scrolling class based on desktop state
-      if (listRef.current) {
-        if (isDesktopRef.current) {
-          listRef.current.classList.add('auto-scrolling');
-        } else {
-          listRef.current.classList.remove('auto-scrolling');
-        }
-      }
+      setShowArrows(!isDesktopRef.current);
     };
     checkDesktop();
     window.addEventListener('resize', checkDesktop);
@@ -48,72 +72,20 @@ export default function CoverFlow({ title, subtitle }: CoverFlowProps) {
     const list = listRef.current;
     if (!list) return;
 
-    let scrollDirection = 1;
-    let isPaused = false;
-
-    const autoScroll = () => {
-      if (!isDesktopRef.current || isPaused) {
-        autoScrollRef.current = requestAnimationFrame(autoScroll);
-        return;
-      }
-
-      const maxScroll = list.scrollWidth - list.clientWidth;
-      const currentScroll = list.scrollLeft;
-
-      // Reverse direction at edges
-      if (currentScroll >= maxScroll - 1) {
-        scrollDirection = -1;
-      } else if (currentScroll <= 1) {
-        scrollDirection = 1;
-      }
-
-      list.scrollLeft += scrollDirection * 0.8;
-      autoScrollRef.current = requestAnimationFrame(autoScroll);
+    // Desktop: Enable wheel scroll horizontally
+    const handleWheel = (e: WheelEvent) => {
+      if (!isDesktopRef.current) return;
+      e.preventDefault();
+      // Support both vertical scroll (mouse wheel) and horizontal swipe (trackpad)
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      list.scrollLeft += delta * 0.5;
     };
 
-    // Pause on hover/touch - re-enable snap for manual scrolling
-    const handleMouseEnter = () => {
-      isPaused = true;
-      list.classList.remove('auto-scrolling');
-    };
-    const handleMouseLeave = () => {
-      isPaused = false;
-      if (isDesktopRef.current) {
-        list.classList.add('auto-scrolling');
-      }
-    };
-    const handleTouchStart = () => {
-      isPaused = true;
-      list.classList.remove('auto-scrolling');
-    };
-    const handleTouchEnd = () => {
-      setTimeout(() => {
-        isPaused = false;
-        if (isDesktopRef.current) {
-          list.classList.add('auto-scrolling');
-        }
-      }, 2000);
-    };
-
-    list.addEventListener('mouseenter', handleMouseEnter);
-    list.addEventListener('mouseleave', handleMouseLeave);
-    list.addEventListener('touchstart', handleTouchStart);
-    list.addEventListener('touchend', handleTouchEnd);
-
-    // Start auto-scroll with a small delay
-    setTimeout(() => {
-      autoScrollRef.current = requestAnimationFrame(autoScroll);
-    }, 1000);
+    list.addEventListener('wheel', handleWheel, { passive: false });
 
     return () => {
       window.removeEventListener('resize', checkDesktop);
-      if (autoScrollRef.current) {
-        cancelAnimationFrame(autoScrollRef.current);
-      }
-      list.removeEventListener('mouseenter', handleMouseEnter);
-      list.removeEventListener('mouseleave', handleMouseLeave);
-      list.removeEventListener('touchstart', handleTouchStart);
-      list.removeEventListener('touchend', handleTouchEnd);
+      list.removeEventListener('wheel', handleWheel);
     };
   }, []);
 
@@ -236,9 +208,32 @@ export default function CoverFlow({ title, subtitle }: CoverFlowProps) {
 
       {/* Cover Flow Container */}
       <div className="coverflow-wrapper">
+        {/* Mobile Navigation Arrows */}
+        {showArrows && (
+          <>
+            <button
+              onClick={scrollToPrev}
+              className="md:hidden absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300"
+              aria-label="Previous artist"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              onClick={scrollToNext}
+              className="md:hidden absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300"
+              aria-label="Next artist"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </>
+        )}
         <ul
           ref={listRef}
-          className={`coverflow-list ${supportsScrollTimeline ? 'css-scroll-driven' : 'js-fallback'}`}
+          className={`coverflow-list ${supportsScrollTimeline ? 'css-scroll-driven' : 'js-fallback'} hover:cursor-grab active:cursor-grabbing`}
         >
           {artists.map((artist) => (
             <li key={artist.id} className="coverflow-item">

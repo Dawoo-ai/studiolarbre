@@ -62,6 +62,21 @@ export default function Hero({ tagline }: HeroProps) {
           <div className="flex justify-center mt-12 md:mt-16">
             <div className="h-px w-16 md:w-20 bg-gradient-to-r from-transparent via-white/60 to-transparent" />
           </div>
+          {/* Reservation Button */}
+          <div className="flex justify-center mt-10 md:mt-16">
+            <a
+              href="mailto:valentin.larbre@gmail.com"
+              className="group relative px-12 py-5 md:px-16 md:py-6 text-lg md:text-xl text-white font-light tracking-wide transition-all duration-500 hover:scale-105 rounded-full"
+            >
+              <span className="relative z-10">Réserver une session</span>
+              {/* Glass effect background */}
+              <div className="absolute inset-0 bg-white/10 backdrop-blur-md rounded-full group-hover:bg-white/20 transition-all duration-500" />
+              {/* Border */}
+              <div className="absolute inset-0 border-2 border-white/40 rounded-full group-hover:border-white/70 transition-all duration-500" />
+              {/* Inner glow */}
+              <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: 'inset 0 0 20px rgba(255, 255, 255, 0.2)' }} />
+            </a>
+          </div>
         </div>
       </div>
 

@@ -17,12 +17,48 @@ export default function StudioGallery() {
   const [shuffledPhotos, setShuffledPhotos] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
     // Shuffle all photos on mount
     const shuffled = [...studioPhotos].sort(() => Math.random() - 0.5);
     setShuffledPhotos(shuffled);
   }, []);
+
+  useEffect(() => {
+    // Check if desktop
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+
+    return () => {
+      window.removeEventListener('resize', checkDesktop);
+    };
+  }, []);
+
+  // Desktop: Enable horizontal scroll with mouse wheel and trackpad
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      if (window.innerWidth >= 768) {
+        e.preventDefault();
+        // Support both vertical scroll (mouse wheel) and horizontal swipe (trackpad)
+        const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+        container.scrollLeft += delta * 0.5;
+      }
+    };
+
+    container.addEventListener('wheel', handleWheel, { passive: false });
+
+    return () => {
+      container.removeEventListener('wheel', handleWheel);
+    };
+  }, [shuffledPhotos]);
 
   const scrollToIndex = (index: number) => {
     if (scrollContainerRef.current) {
@@ -44,13 +80,40 @@ export default function StudioGallery() {
     }
   };
 
+  // Video autoplay: play video when scrolled into view
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            video.play().catch(() => {
+              // Autoplay was prevented
+            });
+          } else {
+            if (!isDesktop) {
+              video.pause();
+            }
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [isDesktop]);
+
   return (
     <section className="pb-32 md:pb-40 bg-black">
-      <div className="container mx-auto px-8 md:px-20 lg:px-32 max-w-[1800px]">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 lg:gap-24">
+      <div className="container mx-auto px-8 max-w-[1600px]">
+        <div className="flex flex-col gap-12 md:gap-20 lg:gap-24 md:items-center">
           {/* Video */}
-          <div className="group relative aspect-[3/4] overflow-hidden">
+          <div className="group relative w-full aspect-[9/16] md:w-[450px] overflow-hidden">
             <video
+              ref={videoRef}
               autoPlay
               loop
               muted
@@ -63,11 +126,11 @@ export default function StudioGallery() {
           </div>
 
           {/* Horizontal Scroll Carousel */}
-          <div className="relative">
+          <div className="relative w-full aspect-[9/16] md:w-[450px]">
             <div
               ref={scrollContainerRef}
               onScroll={handleScroll}
-              className="flex overflow-x-auto overflow-y-hidden aspect-[3/4] snap-x snap-mandatory scrollbar-hide"
+              className="flex overflow-x-auto overflow-y-hidden h-full snap-x snap-mandatory scrollbar-hide hover:cursor-grab active:cursor-grabbing"
               style={{
                 scrollBehavior: 'smooth',
                 WebkitOverflowScrolling: 'touch',
