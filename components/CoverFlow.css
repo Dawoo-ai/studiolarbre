@@ -57,6 +57,10 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
   transform-style: preserve-3d;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .coverflow-list::-webkit-scrollbar {

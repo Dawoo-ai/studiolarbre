@@ -45,6 +45,11 @@ export default function CoverFlow({ title, subtitle }: CoverFlowProps) {
   const isDesktopRef = useRef(false);
   const [showArrows, setShowArrows] = useState(false);
 
+  // Drag to scroll state
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+
   // Handle scroll navigation for mobile
   const scrollToNext = () => {
     if (!listRef.current) return;
@@ -58,6 +63,35 @@ export default function CoverFlow({ title, subtitle }: CoverFlowProps) {
     const list = listRef.current;
     const itemWidth = list.querySelector('.coverflow-item')?.clientWidth || 0;
     list.scrollBy({ left: -itemWidth, behavior: 'smooth' });
+  };
+
+  // Drag to scroll handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!listRef.current) return;
+    isDraggingRef.current = true;
+    startXRef.current = e.pageX - listRef.current.offsetLeft;
+    scrollLeftRef.current = listRef.current.scrollLeft;
+    listRef.current.style.scrollBehavior = 'auto';
+  };
+
+  const handleMouseLeave = () => {
+    if (!listRef.current) return;
+    isDraggingRef.current = false;
+    listRef.current.style.scrollBehavior = 'smooth';
+  };
+
+  const handleMouseUp = () => {
+    if (!listRef.current) return;
+    isDraggingRef.current = false;
+    listRef.current.style.scrollBehavior = 'smooth';
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDraggingRef.current || !listRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - listRef.current.offsetLeft;
+    const walk = (x - startXRef.current) * 2; // Multiply for faster scroll
+    listRef.current.scrollLeft = scrollLeftRef.current - walk;
   };
 
   // Desktop: Enable horizontal scroll with mouse wheel and trackpad
@@ -234,6 +268,10 @@ export default function CoverFlow({ title, subtitle }: CoverFlowProps) {
         <ul
           ref={listRef}
           className={`coverflow-list ${supportsScrollTimeline ? 'css-scroll-driven' : 'js-fallback'} hover:cursor-grab active:cursor-grabbing`}
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseLeave}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
         >
           {artists.map((artist) => (
             <li key={artist.id} className="coverflow-item">
