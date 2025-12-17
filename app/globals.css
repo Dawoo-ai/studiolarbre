@@ -85,7 +85,7 @@ body {
 /* Premium Reservation Button */
 .reservation-button {
   display: inline-block;
-  padding: 1.75rem 3.5rem;
+  padding: 1rem 2rem;
   border-radius: 9999px;
   background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
   backdrop-filter: blur(20px);
@@ -126,7 +126,7 @@ body {
 .button-text {
   display: block;
   color: white;
-  font-size: 1.125rem;
+  font-size: 0.875rem;
   font-weight: 300;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -138,21 +138,21 @@ body {
 
 @media (min-width: 768px) {
   .reservation-button {
-    padding: 2.25rem 5rem;
+    padding: 1.25rem 3rem;
   }
 
   .button-text {
-    font-size: 1.75rem;
+    font-size: 1rem;
   }
 }
 
 @media (min-width: 1024px) {
   .reservation-button {
-    padding: 2.75rem 6.5rem;
+    padding: 1.5rem 4rem;
   }
 
   .button-text {
-    font-size: 2.25rem;
+    font-size: 1.125rem;
   }
 }
 
